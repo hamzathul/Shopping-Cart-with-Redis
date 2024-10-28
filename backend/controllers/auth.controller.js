@@ -19,8 +19,8 @@ const storeRefreshToken = async (userId, refreshToken) => {
     `refresh_token:${userId}`,
     refreshToken,
     "EX",
-    7 * 24 * 60 * 60 * 60
-  ); // 7 Days
+    7 * 24 * 60 * 60 // expires after 7 Days
+  ); 
 };
 
 const setCookies = (res, accessToken, refreshToken) => {
@@ -146,3 +146,7 @@ export const refreshToken = async(req, res)=>{
     res.status(500).json({message:"server error", error:error.message})
   }
 }
+
+// export const getProfile = async (req,res)=>{
+
+// }
