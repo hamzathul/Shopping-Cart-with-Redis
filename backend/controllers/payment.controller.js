@@ -1,5 +1,6 @@
 import { razorpay } from "../lib/razorpay.js";
 import Coupon from "../models/coupon.model.js";
+import Order from "../models/order.model.js";
 
 export const createCheckoutSession = async (req, res) => {
   try {
@@ -68,6 +69,57 @@ export const createCheckoutSession = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error Processing checkout", error: error.message });
+  }
+};
+
+export const checkoutSuccess = async (req, res) => {
+  try {
+    const { orderId, paymentId } = req.body;
+    const orderDetails = await razorpay.orders.fetch(orderId);
+
+    if (orderDetails.status === "Paid") {
+      if (orderDetails.notes.couponCode) {
+        await Coupon.findOneAndUpdate(
+          {
+            code: orderDetails.notes.couponCode,
+            userId: orderDetails.notes.userId,
+          },
+          { isActive: false }
+        );
+      }
+
+      const products = JSON.parse(orderDetails.notes.products);
+      const newOrder = new Order({
+        user: orderDetails.notes.userId,
+        products: products.map((product) => ({
+          product: product.id,
+          quantity: product.quantity,
+          price: product.price,
+        })),
+        totalAmount: orderDetails.amount / 100, // convert from paise to rupees
+        razorpayOrderId: orderId,
+        paymentId,
+      });
+
+      await newOrder.save();
+
+      res
+        .status(200)
+        .json({
+          success: true,
+          message:
+            "Payment successful, order created, and coupon deactivated if used.",
+          orderId: newOrder._id,
+        });
+    }
+  } catch (error) {
+    console.error("Error processing successful checkout:", error);
+    res
+      .status(500)
+      .json({
+        message: "Error processing successful checkout",
+        error: error.message,
+      });
   }
 };
 

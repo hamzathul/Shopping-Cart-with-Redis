@@ -26,19 +26,23 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
-    totalAmount:{
-        type:Number,
-        required:true,
-        min:0,
+    totalAmount: {
+      type: Number,
+      required: true,
+      min: 0,
     },
-    stripeSessionId:{
-        type:String,
-        unique:true
-    }
+    razorpayOrderId: {
+      type: String,
+      unique: true,
+    },
+    paymentId: {
+      type: String,
+      unique: true,
+    },
   },
   { timestamps: true }
 );
 
-const Order = new mongoose.Model("Order", orderSchema);
+const Order = new mongoose.model("Order", orderSchema);
 
 export default Order;
