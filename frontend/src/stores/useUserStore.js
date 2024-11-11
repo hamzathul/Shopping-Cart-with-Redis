@@ -10,13 +10,18 @@ export const useUserStore = create((set, get) => ({
   signup: async ({ name, email, password, confirmPassword }) => {
     set({ loading: true });
 
+    if (password.length < 6) {
+      set({ loading: false });
+      return toast.error("Password should be atleast 6 characters long.");
+    }
+
     if (password != confirmPassword) {
       set({ loading: false });
-      return toast.error("passwords do not match");
+      return toast.error("Passwords do not match");
     }
 
     try {
-      const res = axios.post("/auth/signup", { name, email, password });
+      const res = await axios.post("/auth/signup", { name, email, password });
       set({ user: res.data.user, loading: false });
     } catch (error) {
       set({ loading: false });
