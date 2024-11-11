@@ -1,17 +1,19 @@
-import {motion} from 'framer-motion'
-import {Link} from 'react-router-dom'
-import {LogIn, Mail, Lock, ArrowRight, Loader} from 'lucide-react'
-import { useState } from 'react'
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { LogIn, Mail, Lock, ArrowRight, Loader } from "lucide-react";
+import { useState } from "react";
+import { useUserStore } from "../stores/useUserStore";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const loading = true
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { login, loading } = useUserStore();
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(email, password)
-  }
+    e.preventDefault();
+    login(email, password);
+  };
   return (
     <div className="flex flex-col justify-center sm:px-6 lg:px-8">
       <motion.div
@@ -33,8 +35,6 @@ const LoginPage = () => {
       >
         <div className="bg-gray-800 py-7 px-4 shadow sm:rounded-lg sm:px-10">
           <form onSubmit={handleSubmit} className="space-y-6">
-            
-
             <div>
               <label
                 htmlFor="email"
@@ -83,8 +83,6 @@ const LoginPage = () => {
               </div>
             </div>
 
-            
-
             <button
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
@@ -122,6 +120,6 @@ const LoginPage = () => {
       </motion.div>
     </div>
   );
-}
+};
 
-export default LoginPage
+export default LoginPage;
