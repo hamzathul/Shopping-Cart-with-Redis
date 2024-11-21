@@ -45,6 +45,14 @@ export const useCartStore = create((set, get) => ({
     }
   },
 
+  removeFromCart: async (productId) => {
+    await axios.delete("/cart", { data: { productId } });
+    set((prevState) => ({
+      cart: prevState.cart.filter((item) => item._id !== productId),
+    }));
+    get().calculateTotals();
+  },
+
   calculateTotals: () => {
     // utility function
     const { cart, coupon } = get();

@@ -14,15 +14,10 @@ import CartPage from "./pages/CartPage";
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
-  const { getCartItems } = useCartStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-
-  useEffect(() => {
-    getCartItems();
-  }, [getCartItems]);
 
   if (checkingAuth) {
     return <LoadingSpinner />;
