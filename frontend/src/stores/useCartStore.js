@@ -7,6 +7,7 @@ export const useCartStore = create((set, get) => ({
   coupon: null,
   total: 0,
   subtotal: 0,
+  isCouponApplied: false,
   // loading:false,
 
   getCartItems: async () => {
@@ -64,7 +65,7 @@ export const useCartStore = create((set, get) => ({
         item._id === productId ? { ...item, quantity } : item
       ),
     }));
-    get().calculateTotals()
+    get().calculateTotals();
   },
 
   calculateTotals: () => {
