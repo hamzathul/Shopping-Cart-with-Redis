@@ -1,18 +1,55 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
+import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
 import { useCartStore } from "../stores/useCartStore";
+import axios from "../lib/axios";
 
 const OrderSummary = () => {
-  const { total, subtotal, coupon, isCouponApplied } = useCartStore();
+  const { error, isLoading, Razorpay } = useRazorpay();
+
+  const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
 
   const savings = subtotal - total;
   const formattedSubtotal = subtotal.toFixed(2);
   const formattedTotal = total.toFixed(2);
   const formattedSavings = savings.toFixed(2);
 
-  const handleClick = (e)=>{
-    console.log()
+  const handlePayment = async () => {
+    const res = await axios.post("/payments/create-checkout-session", {
+      products: cart,
+      coupon: coupon ? coupon.code : null,
+    });
+
+    const session = res.data
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: session.totalAmount, // Amount in paise
+      currency: "INR",
+      name: "Test Company",
+      description: "Test Transaction",
+      order_id: session.id, // Generate order_id on server
+      handler: (response) => {
+        console.log(response);
+        alert("Payment Successful!");
+      },
+      prefill: {
+        name: "John Doe",
+        email: "john.doe@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#F37254",
+      },
+    };
+
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+  };
+
+  if(error){
+    console.log(error)
   }
 
   return (
@@ -66,7 +103,7 @@ const OrderSummary = () => {
         focus:ring-4 focus:ring-emerald-300"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={handleClick}
+          onClick={handlePayment}
         >
           Proceed to Checkout
         </motion.button>

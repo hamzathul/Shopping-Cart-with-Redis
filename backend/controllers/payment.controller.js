@@ -42,7 +42,6 @@ export const createCheckoutSession = async (req, res) => {
       amount: totalAmount,
       currency: "INR",
       payment_capture: 1,
-      description: "Order Payment",
       receipt: `receipt#${Math.random() * 1000}`,
       notes: {
         userId: req.user._id.toString(),
