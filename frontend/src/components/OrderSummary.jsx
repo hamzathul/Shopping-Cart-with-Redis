@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
-import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
 import { useCartStore } from "../stores/useCartStore";
 import axios from "../lib/axios";
 
 const OrderSummary = () => {
-  const { error, isLoading, Razorpay } = useRazorpay();
 
   const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
 
@@ -24,33 +22,31 @@ const OrderSummary = () => {
     const session = res.data
 
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: session.totalAmount, // Amount in paise
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
+      amount: session.totalAmount, 
       currency: "INR",
-      name: "Test Company",
+      name: "Acme Corp", // your business name
       description: "Test Transaction",
-      order_id: session.id, // Generate order_id on server
-      handler: (response) => {
-        console.log(response);
-        alert("Payment Successful!");
-      },
+      image: "https://example.com/your_logo",
+      order_id: session.id, 
+      callback_url: "https://www.google.com/",
       prefill: {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        contact: "9999999999",
+        name: "Hamzathul Favas E", // customer's name
+        email: "ehamzathulfavas@gmail.com",
+        contact: "9048787719", // customer's phone number
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
       },
       theme: {
-        color: "#F37254",
+        color: "#3399cc",
       },
     };
 
-    const razorpayInstance = new Razorpay(options);
-    razorpayInstance.open();
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
   };
 
-  if(error){
-    console.log(error)
-  }
 
   return (
     <motion.div
