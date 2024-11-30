@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
 import axios from "../lib/axios";
 
 const OrderSummary = () => {
+    const navigate = useNavigate();
 
   const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
 
@@ -22,14 +24,16 @@ const OrderSummary = () => {
     const session = res.data
 
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
-      amount: session.totalAmount, 
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: session.totalAmount,
       currency: "INR",
       name: "Acme Corp", // your business name
       description: "Test Transaction",
       image: "https://example.com/your_logo",
-      order_id: session.id, 
-      callback_url: "https://www.google.com/",
+      order_id: session.id,
+      // callback_url: `http://localhost:5173/purchase-success?session_id=${session.id}`,
+      // callback_url: `${window.location.origin}/payment-success`,
+      // redirect: true,
       prefill: {
         name: "Hamzathul Favas E", // customer's name
         email: "ehamzathulfavas@gmail.com",
@@ -40,6 +44,19 @@ const OrderSummary = () => {
       },
       theme: {
         color: "#3399cc",
+      },
+      handler: function (response) {
+        // This function is triggered on successful payment
+        const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+          response;
+
+          navigate(`/purchase-success`, {
+          state: {
+            payment_id: razorpay_payment_id,
+            order_id: razorpay_order_id,
+            signature: razorpay_signature,
+          },
+        });
       },
     };
 

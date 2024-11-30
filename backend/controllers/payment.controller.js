@@ -76,7 +76,7 @@ export const checkoutSuccess = async (req, res) => {
     const { orderId, paymentId } = req.body;
     const orderDetails = await razorpay.orders.fetch(orderId);
 
-    if (orderDetails.status === "Paid") {
+    if (orderDetails.status === "paid") {
       if (orderDetails.notes.couponCode) {
         await Coupon.findOneAndUpdate(
           {
