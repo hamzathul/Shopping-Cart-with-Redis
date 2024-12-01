@@ -6,7 +6,7 @@ import { useCartStore } from "../stores/useCartStore";
 import axios from "../lib/axios";
 
 const OrderSummary = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
 
@@ -21,7 +21,7 @@ const OrderSummary = () => {
       coupon: coupon ? coupon.code : null,
     });
 
-    const session = res.data
+    const session = res.data;
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -50,7 +50,7 @@ const OrderSummary = () => {
         const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
           response;
 
-          navigate(`/purchase-success`, {
+        navigate(`/purchase-success`, {
           state: {
             payment_id: razorpay_payment_id,
             order_id: razorpay_order_id,
@@ -61,9 +61,13 @@ const OrderSummary = () => {
     };
 
     const rzp1 = new window.Razorpay(options);
+
+    rzp1.on("payment.failed", function (response) {
+      navigate("/purchase-cancel");
+    });
+
     rzp1.open();
   };
-
 
   return (
     <motion.div
