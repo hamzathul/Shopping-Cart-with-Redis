@@ -19,6 +19,12 @@ export const useCartStore = create((set, get) => ({
     }
   },
 
+  removeCoupon:()=>{
+    set({coupon:null, isCouponApplied:false})
+    get().calculateTotals()
+    toast.success("Coupon removed")
+  },
+
   applyCoupon: async (code) => {
     try {
       const response = await axios.post("/coupons/validate", { code });
