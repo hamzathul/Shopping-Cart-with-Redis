@@ -16,6 +16,15 @@ const FeaturedProducts = ({ featuredProducts }) => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => prevIndex + itemsPerPage);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => prevIndex - itemsPerPage);
+  };
+
   return <div>FeaturedProducts</div>;
 };
 
