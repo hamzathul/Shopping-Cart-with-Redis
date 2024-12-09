@@ -25,6 +25,9 @@ const FeaturedProducts = ({ featuredProducts }) => {
     setCurrentIndex((prevIndex) => prevIndex - itemsPerPage);
   };
 
+  const isStartDisabled = currentIndex === 0;
+  const isEndDisabled = currentIndex >= featuredProducts.length - itemsPerPage;
+
   return <div>FeaturedProducts</div>;
 };
 
