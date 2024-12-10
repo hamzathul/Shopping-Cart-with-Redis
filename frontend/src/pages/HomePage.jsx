@@ -2,15 +2,20 @@ import { useEffect } from "react";
 import CategoryItem from "../components/CategoryItem";
 import { useProductStore } from "../stores/useProductStore";
 import FeaturedProducts from "../components/FeaturedProducts";
+import { imageLinks } from "../assets/imageLinks";
 
 const categories = [
-  { href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
-  { href: "/t-shirts", name: "T-Shirts", imageUrl: "/tshirts.jpg" },
-  { href: "/shoes", name: "Shoes", imageUrl: "/shoes.jpg" },
-  { href: "/glasses", name: "Glasses", imageUrl: "/glasses.png" },
-  { href: "/jackets", name: "Jackets", imageUrl: "/jackets.jpg" },
-  { href: "/suits", name: "Suits", imageUrl: "/suits.jpg" },
-  { href: "/bags", name: "Bags", imageUrl: "/bags.jpg" },
+  {
+    href: "/jeans",
+    name: "Jeans",
+    imageUrl: imageLinks.jeans,
+  },
+  { href: "/t-shirts", name: "T-Shirts", imageUrl: imageLinks.tshirts },
+  { href: "/shoes", name: "Shoes", imageUrl: imageLinks.shoes },
+  { href: "/glasses", name: "Glasses", imageUrl: imageLinks.glasses },
+  { href: "/jackets", name: "Jackets", imageUrl: imageLinks.jackets },
+  { href: "/suits", name: "Suits", imageUrl: imageLinks.suits },
+  { href: "/bags", name: "Bags", imageUrl: imageLinks.bags },
 ];
 
 const HomePage = () => {
