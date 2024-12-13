@@ -72,3 +72,7 @@ The backend will run on http://localhost:5000.
 The frontend will run on http://localhost:5173.
 
 Now you can open your browser and go to http://localhost:5173 to view the application.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+
