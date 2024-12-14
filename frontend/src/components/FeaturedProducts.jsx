@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
 import { useUserStore } from "../stores/useUserStore";
@@ -9,7 +9,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
   const [itemsPerPage, setItemsPerPage] = useState(4);
 
   const { addToCart } = useCartStore();
-  const {user} = useUserStore()
+  const { user } = useUserStore();
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,7 +35,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
   const isStartDisabled = currentIndex === 0;
   const isEndDisabled = currentIndex >= featuredProducts.length - itemsPerPage;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (product) => {
     if (!user) {
       toast.error("Please login to add products to the cart", { id: "login" });
       return;
@@ -82,7 +82,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
                         ${product.price.toFixed(2)}
                       </p>
                       <button
-                        onClick={handleAddToCart}
+                        onClick={() => handleAddToCart(product)}
                         className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 
 												flex items-center justify-center"
                       >

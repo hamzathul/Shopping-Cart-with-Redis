@@ -55,7 +55,7 @@ export const useCartStore = create((set, get) => ({
   addToCart: async (product) => {
     try {
       await axios.post("/cart", { productId: product._id });
-      toast.success("product added to cart");
+      toast.success("product added to cart",{id:"addToCart"});
 
       set((prevState) => {
         const existingItem = prevState.cart.find(
