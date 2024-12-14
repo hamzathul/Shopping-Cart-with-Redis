@@ -22,7 +22,7 @@ const PurchaseSuccessPage = () => {
     const handleCheckoutSuccess = async (sessionId) => {
       try {
         await axios.post("/payments/checkout-success", { orderId: order_id, paymentId:payment_id });
-        clearCart();
+        await clearCart();
       } catch (error) {
         console.log(error);
       }
@@ -34,7 +34,7 @@ const PurchaseSuccessPage = () => {
     } else {
       setError("No session ID found in the URL");
     }
-  }, [clearCart]);
+  }, []);
 
 
   if(error) return `Error: ${error}`

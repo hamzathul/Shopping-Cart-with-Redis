@@ -44,15 +44,16 @@ export const removeAllFromCart = async (req, res) => {
     const { productId } = req.body;
     const user = req.user;
     if (!productId) {
-      user.cartItems = [];
+      // user.cartItems = [];
+      await user.updateOne({ $set: { cartItems: [] } });
     } else {
       user.cartItems = user.cartItems.filter((item) => item.id !== productId);
+      await user.save();
     }
 
-    await user.save();
     res.json(user.cartItems);
   } catch (error) {
-    console.log("Error in removeAllFromCart controller:", error.message);
+    console.log("Error in removeAllFromCart controller:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -60,7 +61,7 @@ export const removeAllFromCart = async (req, res) => {
 export const updateQuantity = async (req, res) => {
   try {
     const { id: productId } = req.params;
-    const {quantity} = req.body;
+    const { quantity } = req.body;
     const user = req.user;
     const existingItem = user.cartItems.find((item) => item.id === productId);
 
