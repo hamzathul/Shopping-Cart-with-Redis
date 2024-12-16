@@ -1,7 +1,7 @@
 import { ArrowRight, CheckCircle, HandHeart } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Confetti from 'react-confetti'
+import Confetti from "react-confetti";
 import { useCartStore } from "../stores/useCartStore";
 import axios from "../lib/axios";
 
@@ -9,47 +9,44 @@ const PurchaseSuccessPage = () => {
   const location = useLocation();
   const { payment_id, order_id, signature } = location.state || {};
 
+  //   console.log(payment_id);
+  //   console.log(signature);
+  //   console.log(order_id);
 
-
-//   console.log(payment_id);
-//   console.log(signature);
-//   console.log(order_id);
-
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
   const { clearCart } = useCartStore();
 
   useEffect(() => {
-    const handleCheckoutSuccess = async (sessionId) => {
+    const handleCheckoutSuccess = async () => {
       try {
-        await axios.post("/payments/checkout-success", { orderId: order_id, paymentId:payment_id });
+        await axios.post("/payments/checkout-success", {
+          orderId: order_id,
+          paymentId: payment_id,
+          signature,
+        });
         await clearCart();
       } catch (error) {
         console.log(error);
+        setError("Server error");
       }
     };
 
-    const sessionId = order_id;
-    if (sessionId) {
-      handleCheckoutSuccess(sessionId);
-    } else {
-      setError("No session ID found in the URL");
-    }
-  }, []);
+    if (payment_id && order_id && signature) handleCheckoutSuccess();
+  }, [payment_id, order_id, signature]);
 
+  if (error) return `Error: ${error}`;
 
-  if(error) return `Error: ${error}`
-
-  if (!payment_id) {
+  if (!payment_id && !order_id && !signature) {
     return <p>Invalid access to this page.</p>;
   }
 
   return (
     <div className="h-screen flex items-center justify-center px-4">
-      <Confetti 
+      <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
         gravity={0.1}
-        style={{zIndex:99}}
+        style={{ zIndex: 99 }}
         numberOfPieces={700}
         recycle={false}
       />
@@ -71,9 +68,9 @@ const PurchaseSuccessPage = () => {
           </p>
           <div className="bg-gray-700 rounded-lg p-4 mb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-400">Order number</span>
+              <span className="text-sm text-gray-400">Order ID</span>
               <span className="text-sm font-semibold text-emerald-400">
-                #12345
+                {order_id}
               </span>
             </div>
             <div className="flex items-center justify-between">
